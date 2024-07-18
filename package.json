@@ -1,0 +1,21 @@
+{
+  "name": "mocha-apitest",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon api.js",
+    "test": "mocha test/**/*.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "chai": "^5.1.1",
+    "chai-http": "^5.0.0",
+    "express": "^4.19.2",
+    "mocha": "^10.6.0",
+    "nodemon": "^3.1.4"
+  }
+}
