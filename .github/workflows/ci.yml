@@ -21,14 +21,35 @@ jobs:
         with:
           node-version: '20'
 
+      - name: Clean npm cache
+        run: npm cache clean --force
+
       - name: Install dependencies
         run: npm install
 
       - name: List files in node_modules/.bin
         run: ls -la node_modules/.bin
 
-      - name: Run tests
-        run: npx mocha test/**/*.test.js
+      - name: Check executable permissions before
+        run: stat node_modules/.bin/mocha
+
+      - name: Make mocha executable
+        run: chmod +x node_modules/.bin/mocha
+
+      - name: Check executable permissions after
+        run: stat node_modules/.bin/mocha
+
+      - name: Check Node.js version
+        run: node -v
+
+      - name: Check npm version
+        run: npm -v
+
+      - name: Check Mocha version
+        run: npx mocha --version
+
+      - name: Run tests with explicit node command
+        run: node_modules/.bin/mocha test/**/*.test.js
         continue-on-error: false
 
       - name: Upload test results
