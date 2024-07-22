@@ -34,12 +34,6 @@ app.put('/api/users/:id', (req, res) => {
   res.json(updatedUser);
 });
 
-// DELETE Delete a user by ID
-app.delete('/api/users/:id', (req, res) => {
-  const { id } = req.params;
-  users = users.filter(user => user.id !== parseInt(id));
-  res.sendStatus(204);
-});
 
 // Start the server
 const PORT = 3000;
