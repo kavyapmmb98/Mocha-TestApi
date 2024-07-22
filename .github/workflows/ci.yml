@@ -48,8 +48,8 @@ jobs:
       - name: Check Mocha version
         run: npx mocha --version
 
-      - name: Run tests with explicit node command
-        run: node_modules/.bin/mocha test/**/*.test.js
+      - name: Run tests 
+        run: npm test
         continue-on-error: false
 
       - name: Upload test results
