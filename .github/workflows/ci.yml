@@ -52,8 +52,12 @@ jobs:
         run: node_modules/.bin/mocha test/**/*.test.js --exit
 
       - name: Upload test results
-        if: success() # This condition ensures this step runs only if previous steps succeeded
+        if: always() # This condition ensures the results are uploaded regardless of the test outcome
         uses: actions/upload-artifact@v4
         with:
           name: mocha-tests
           path: test-results.xml
+
+      - name: Ensure tests pass before any further steps
+        if: failure()
+        run: exit 1

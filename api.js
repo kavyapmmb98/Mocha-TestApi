@@ -4,7 +4,6 @@ import bodyParser from 'body-parser';
 
 const app = express();
 
-// Sample data
 let users = [
   { id: 1, name: 'Test' },
   { id: 2, name: 'Test2' },
