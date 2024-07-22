@@ -50,7 +50,6 @@ jobs:
 
       - name: Run tests with explicit node command
         run: node_modules/.bin/mocha test/**/*.test.js --exit
-        continue-on-error: false
 
       - name: Upload test results
         if: success() # This condition ensures this step runs only if previous steps succeeded
