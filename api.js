@@ -9,7 +9,6 @@ let users = [
   { id: 2, name: 'Test2' },
 ];
 
-// Middleware for parsing JSON bodies
 app.use(bodyParser.json());
 
 // GET Get all users
