@@ -48,11 +48,12 @@ jobs:
       - name: Check Mocha version
         run: npx mocha --version
 
-      - name: Run tests 
-        run: npm test
+      - name: Run tests with explicit node command
+        run: node_modules/.bin/mocha test/**/*.test.js --exit
         continue-on-error: false
 
       - name: Upload test results
+        if: success() # This condition ensures this step runs only if previous steps succeeded
         uses: actions/upload-artifact@v4
         with:
           name: mocha-tests
