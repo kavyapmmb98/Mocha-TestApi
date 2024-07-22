@@ -1,5 +1,6 @@
 
-import { strict as assert } from 'assert';
+
+import { strict as assert } from 'assert'; 
 import request from 'supertest';
 import app from '../api.js'; 
 
@@ -36,5 +37,18 @@ describe('API Tests', () => {
     // assert.strictEqual(response.body.name, 'Updated User');
   });
 
+  it('DELETE /api/users/:id should delete an existing user', async () => {
+    // First, ensure there are 2 users
+    const initialResponse = await request(app).get('/api/users');
+    assert.strictEqual(initialResponse.body.length, 2);
 
+    // Delete user with id 1
+    const deleteResponse = await request(app).delete('/api/users/1');
+    assert.strictEqual(deleteResponse.status, 204);
+
+    // Verify user with id 1 is deleted
+    const finalResponse = await request(app).get('/api/users');
+    assert.strictEqual(finalResponse.body.length, 1);
+    assert.strictEqual(finalResponse.body[0].id, 2); // Ensure the remaining user is correct
+  });
 });
