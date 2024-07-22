@@ -28,6 +28,8 @@ jobs:
 
       - name: Run tests
         run: npx mocha
+        continue-on-error: false  # Ensure that test failures stop the pipeline
+
 
 
       - name: Upload test results
