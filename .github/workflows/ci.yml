@@ -27,7 +27,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npx mocha
+        run: npx mocha test/**/*.test.js
         continue-on-error: false  # Ensure that test failures stop the pipeline
 
 
