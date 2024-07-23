@@ -23,7 +23,7 @@ app.post('/api/users', (req, res) => {
   res.status(201).json(newUser);
 });
 
-// PUT Update a user by ID
+// PUT Update a user 
 app.put('/api/users/:id', (req, res) => {
   const { id } = req.params;
   const updatedUser = req.body;
