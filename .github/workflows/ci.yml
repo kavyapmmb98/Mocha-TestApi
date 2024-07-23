@@ -115,7 +115,10 @@ jobs:
             # Check for vulnerabilities and fix if possible
             npm audit fix
 
-            # Run build and migrate scripts
+            npm install -g pm2
+
+
+            # Run build 
             npm run build || { echo "Build script failed"; exit 1; }
             # npm run migrate || { echo "Migrate script failed"; exit 1; }
 
