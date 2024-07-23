@@ -51,13 +51,44 @@ jobs:
       - name: Run tests with explicit node command
         run: node_modules/.bin/mocha test/**/*.test.js --exit
 
-      - name: Upload test results
-        if: always() # This condition ensures the results are uploaded regardless of the test outcome
-        uses: actions/upload-artifact@v4
-        with:
-          name: mocha-tests
-          path: test-results.xml
-
       - name: Ensure tests pass before any further steps
         if: failure()
         run: exit 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: test
+    if: success() # Only run if the tests job succeeds
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan ${{ secrets.VM_IP }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to VM
+        run: |
+          ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} << 'EOF'
+            # Stop existing PM2 service
+            pm2 stop mocha-apitest
+
+            # Navigate to your project directory
+            cd /path/to/your/project
+
+            # Pull latest code from the repository
+            git pull origin main
+
+            npm install
+
+            npm run build
+
+            npm run migrate
+
+            # Restart the application with PM2
+            pm2 restart mocha-apitest
+
+          EOF
