@@ -5,8 +5,8 @@
   "main": "api.js",
   "scripts": {
     "start": "nodemon api.js",
-    "test": "mocha test/**/*.test.js"
-  },
+    "test": "mocha test/**/*.test.js",
+     "build": ""  },
   "author": "",
   "license": "ISC",
   "description": "",

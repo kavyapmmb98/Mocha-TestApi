@@ -79,19 +79,24 @@ jobs:
       - name: Deploy to VM
         run: |
           ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} << 'EOF'
+            #!/bin/bash
+
             # Define the project directory path
             PROJECT_DIR=/var/www/myapp
 
-            # Check if the project directory exists
-            if [ ! -d $PROJECT_DIR ]; then
-              # If it doesn't exist, create it
-              mkdir -p $PROJECT_DIR
-              cd $PROJECT_DIR
+            # Create the project directory with sudo if it doesn't exist
+            if [ ! -d "$PROJECT_DIR" ]; then
+              sudo mkdir -p "$PROJECT_DIR"
+              sudo chown $USER:$USER "$PROJECT_DIR" # Ensure correct ownership
+            fi
+
+            # Change to the project directory
+            cd "$PROJECT_DIR" || exit
+
+            # Initialize Git repository if not already done
+            if [ ! -d ".git" ]; then
               git init
               git remote add origin git@github.com:kavyapmmb98/Mocha-TestApi.git
-            else
-              # If it exists, navigate to the project directory
-              cd $PROJECT_DIR
             fi
 
             # Stop existing PM2 service
@@ -100,13 +105,20 @@ jobs:
             # Pull latest code from the repository
             git pull origin main
 
+            # Handle untracked files if necessary
+            git add .
+            git commit -m "Save untracked files" || true
+
+            # Install dependencies
             npm install
 
-            npm run build
+            # Check for vulnerabilities and fix if possible
+            npm audit fix
 
-            npm run migrate
+            # Run build and migrate scripts
+            npm run build || { echo "Build script failed"; exit 1; }
+            # npm run migrate || { echo "Migrate script failed"; exit 1; }
 
             # Restart the application with PM2
             pm2 restart mocha-apitest
-
           EOF
