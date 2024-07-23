@@ -115,7 +115,7 @@ jobs:
             # Check for vulnerabilities and fix if possible
             npm audit fix
 
-            npm install -g pm2
+            sudo npm install -g pm2 || { echo "Failed to install PM2"; exit 1; }
 
 
             # Run build 
