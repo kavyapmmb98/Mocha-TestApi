@@ -1,4 +1,4 @@
-// api
+// api.js
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -11,7 +11,7 @@ let users = [
 
 app.use(bodyParser.json());
 
-// GET Get all users
+// GET  all users
 app.get('/api/users', (req, res) => {
   res.json(users);
 });
