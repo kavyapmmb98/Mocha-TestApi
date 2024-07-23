@@ -73,11 +73,23 @@ jobs:
       - name: Deploy to VM
         run: |
           ssh ${{ secrets.SSH_USERNAME }}@${{ secrets.VM_IP }} << 'EOF'
-            # Stop existing PM2 service
-            pm2 stop mocha-apitest
+            # Define the project directory path
+            PROJECT_DIR=/var/www/myapp
 
-            # Navigate to your project directory
-            cd /path/to/your/project
+            # Check if the project directory exists
+            if [ ! -d $PROJECT_DIR ]; then
+              # If it doesn't exist, create it
+              mkdir -p $PROJECT_DIR
+              cd $PROJECT_DIR
+              git init
+              git remote add origin git@github.com:kavyapmmb98/Mocha-TestApi.git
+            else
+              # If it exists, navigate to the project directory
+              cd $PROJECT_DIR
+            fi
+
+            # Stop existing PM2 service
+            pm2 stop  mocha-apitest || true
 
             # Pull latest code from the repository
             git pull origin main
